@@ -1,7 +1,7 @@
-package com.nvbn.skateability.app
+package com.nvbn.skateability.app.utils
 
-import java.util.concurrent.{TimeUnit, ThreadPoolExecutor, LinkedBlockingQueue}
 import scala.concurrent.ExecutionContext
+import java.util.concurrent.{LinkedBlockingQueue, TimeUnit, ThreadPoolExecutor}
 
 trait Futerable {
 

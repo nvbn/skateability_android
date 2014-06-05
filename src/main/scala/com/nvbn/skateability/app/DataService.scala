@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.gms.common.{ConnectionResult, GooglePlayServicesClient}
 import com.google.android.gms.location.{LocationRequest, LocationListener, LocationClient}
 import org.scaloid.common._
+import utils.{HasSettings, BindedService}
 
 class DataService extends BindedService with GooglePlayServicesClient.ConnectionCallbacks
                                         with GooglePlayServicesClient.OnConnectionFailedListener

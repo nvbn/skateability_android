@@ -7,6 +7,7 @@ import java.io.{FileOutputStream, File}
 import android.util.Log
 import org.scaloid.common._
 import scala.concurrent.Future
+import utils.{HasSettings, Futerable}
 
 
 class TumblerActivity extends SActivity with Futerable with HasSettings {

@@ -1,4 +1,4 @@
-package com.nvbn.skateability.app
+package com.nvbn.skateability.app.utils
 
 import org.scaloid.common.SService
 import android.os.Binder
