@@ -1,43 +1,35 @@
 package com.nvbn.skateability.app
 
-import android.app.Service
-import android.content.Intent
 import android.location.Location
-import android.os.{Binder, Bundle}
+import android.os.Bundle
 import com.google.android.gms.common.{ConnectionResult, GooglePlayServicesClient}
 import com.google.android.gms.location.{LocationRequest, LocationListener, LocationClient}
+import org.scaloid.common._
 
-class DataService extends Service with GooglePlayServicesClient.ConnectionCallbacks
-                                  with GooglePlayServicesClient.OnConnectionFailedListener
-                                  with LocationListener
-                                  with HasSettings {
+class DataService extends BindedService with GooglePlayServicesClient.ConnectionCallbacks
+                                        with GooglePlayServicesClient.OnConnectionFailedListener
+                                        with LocationListener
+                                        with HasSettings {
   val UPDATE_INTERVAL = 1000
   val FASTEST_INTERVAL = 500
 
-  var mLocationClient: Option[LocationClient] = None
-  var mLocationRequest: Option[LocationRequest] = None
-  val mBinder = new LocalBinder()
-
-  class LocalBinder extends Binder {
-    def getServerInstance = DataService.this
-  }
-
-  override def onBind(intent: Intent) = mBinder
+  var locationClient: Option[LocationClient] = None
+  var locationRequest: Option[LocationRequest] = None
 
   override def onCreate() = {
-    super.onCreate()
-    mLocationRequest = Some(
+    locationRequest = Some(
       LocationRequest.create
         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         .setInterval(UPDATE_INTERVAL)
         .setFastestInterval(FASTEST_INTERVAL))
     val client = new LocationClient(this, this, this)
     client.connect()
-    mLocationClient = Some(client)
+    locationClient = Some(client)
+    super.onCreate()
   }
 
   override def onDestroy() = {
-    for (client <- mLocationClient)
+    for (client <- locationClient)
       client.disconnect()
     settings.session = 0L
     super.onDestroy()
@@ -45,8 +37,8 @@ class DataService extends Service with GooglePlayServicesClient.ConnectionCallba
 
   override def onConnected(dataBundle: Bundle) = {
     for {
-      client <- mLocationClient
-      request <- mLocationRequest
+      client <- locationClient
+      request <- locationRequest
     } client.requestLocationUpdates(request, this)
   }
 
@@ -64,6 +56,6 @@ class DataService extends Service with GooglePlayServicesClient.ConnectionCallba
 
   def waitAndReconnect() = {
     Thread.sleep(500)
-    for {client <- mLocationClient} client.connect()
+    for {client <- locationClient} client.connect()
   }
 }

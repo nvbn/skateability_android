@@ -11,9 +11,9 @@ import scala.concurrent.Future
 
 class TumblerActivity extends SActivity with Futerable with HasSettings {
 
-  protected override def onCreate(savedInstanceState: Bundle) {
+  override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_log)
+    setContentView(R.layout.activity_tumbler)
     manageService(settings.serviceRunned(false))
     initBtn()
     updateBtn()
