@@ -26,6 +26,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LogActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".TumblerActivity" />
+
         <service android:name=".DataService"
             android:label="@string/data_service_name"/>
 

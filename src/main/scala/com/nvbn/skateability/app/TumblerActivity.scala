@@ -31,7 +31,6 @@ class TumblerActivity extends SActivity with Futerable with HasSettings {
     else
       stopService[DataService]
     settings.serviceRunned = run
-    toast(s"Service runned: ${settings.serviceRunned(false)}")
   }
 
   def updateBtn() = find[Button](R.id.tracking_btn).setText(
@@ -51,9 +50,8 @@ class TumblerActivity extends SActivity with Futerable with HasSettings {
     file.createNewFile()
     Log.d("path", file.getAbsolutePath)
     val stream = new FileOutputStream(file.getAbsolutePath)
-    for (entry <- DataEntry.all) {
+    for (entry <- DataEntry.all)
       stream.write(entry.pretty.toCharArray.map(_.toByte))
-    }
     stream.close()
     toast("Log saved!")
   }
@@ -61,6 +59,9 @@ class TumblerActivity extends SActivity with Futerable with HasSettings {
   override def onOptionsItemSelected(item: MenuItem) = item.getItemId match {
     case R.id.action_save_log =>
       saveLog()
+      true
+    case R.id.action_show_log =>
+      startActivity[LogActivity]
       true
     case _ => super.onOptionsItemSelected(item)
   }

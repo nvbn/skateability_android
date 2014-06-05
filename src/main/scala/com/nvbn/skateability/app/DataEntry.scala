@@ -35,5 +35,9 @@ object DataEntry {
 
   def select = Select.from(classOf[DataEntry])
 
-  def from(records: Select[_]) = records.list.asInstanceOf[java.util.List[DataEntry]].asScala
+  def from(records: Select[_]) = records
+    .list
+    .asInstanceOf[java.util.List[DataEntry]]
+    .asScala
+    .toList
 }
