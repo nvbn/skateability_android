@@ -6,7 +6,7 @@ import android.content.Intent
 
 class BindedService extends SService {
   val mBinder = new Binder {
-    def getServerInstance = BindedService.this
+    def getServerInstance = this
   }
 
   override def onBind(intent: Intent) = mBinder
