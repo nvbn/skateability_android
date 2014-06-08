@@ -34,9 +34,12 @@
         <service android:name=".DataService"
             android:label="@string/data_service_name"/>
 
+        <service android:name=".SyncService"
+            android:label="@string/sync_service_name"/>
+
         <meta-data
             android:name="DATABASE"
-            android:value="skateability_3.db" />
+            android:value="skateability_5.db" />
         <meta-data
             android:name="VERSION"
             android:value="1" />

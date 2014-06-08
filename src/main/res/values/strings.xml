@@ -9,5 +9,6 @@
     <string name="start_tracking">Start Tracking</string>
     <string name="stop_tracking">Stop Tracking</string>
     <string name="show_log_btn">Show log</string>
+    <string name="sync_service_name">SyncService</string>
 
 </resources>
