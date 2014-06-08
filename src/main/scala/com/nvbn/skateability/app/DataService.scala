@@ -11,6 +11,8 @@ class DataService extends BindedService with GooglePlayServicesClient.Connection
                                         with GooglePlayServicesClient.OnConnectionFailedListener
                                         with LocationListener
                                         with HasSettings {
+  implicit val tag = LoggerTag("DataService")
+
   val UPDATE_INTERVAL = 1000
   val FASTEST_INTERVAL = 500
 
@@ -18,6 +20,7 @@ class DataService extends BindedService with GooglePlayServicesClient.Connection
   var locationRequest: Option[LocationRequest] = None
 
   override def onCreate() = {
+    info("Create service")
     locationRequest = Some(
       LocationRequest.create
         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -30,6 +33,7 @@ class DataService extends BindedService with GooglePlayServicesClient.Connection
   }
 
   override def onDestroy() = {
+    info("Destroy service")
     for (client <- locationClient)
       client.disconnect()
     settings.session = 0L
@@ -37,17 +41,25 @@ class DataService extends BindedService with GooglePlayServicesClient.Connection
   }
 
   override def onConnected(dataBundle: Bundle) = {
+    info("Connected")
     for {
       client <- locationClient
       request <- locationRequest
     } client.requestLocationUpdates(request, this)
   }
 
-  override def onDisconnected() = waitAndReconnect()
+  override def onDisconnected() = {
+    info("Disconnected")
+    waitAndReconnect()
+  }
 
-  override def onConnectionFailed(connectionResult: ConnectionResult) = waitAndReconnect()
+  override def onConnectionFailed(connectionResult: ConnectionResult) = {
+    info(s"Connection failed: $connectionResult")
+    waitAndReconnect()
+  }
 
   override def onLocationChanged(location: Location) = {
+    info(s"Location changed: $location}")
     if (settings.session(0L) == 0L)
       settings.session = location.getTime
 
@@ -56,6 +68,7 @@ class DataService extends BindedService with GooglePlayServicesClient.Connection
   }
 
   def waitAndReconnect() = {
+    info("Reconnect")
     Thread.sleep(500)
     for {client <- locationClient} client.connect()
   }

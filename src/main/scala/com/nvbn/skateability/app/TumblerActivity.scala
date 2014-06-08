@@ -11,6 +11,7 @@ import utils.{HasSettings, Futerable}
 
 
 class TumblerActivity extends SActivity with Futerable with HasSettings {
+  implicit val tag = LoggerTag("TubmlerActivity")
 
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
@@ -18,6 +19,7 @@ class TumblerActivity extends SActivity with Futerable with HasSettings {
     manageService(settings.serviceRunned(false))
     initBtn()
     updateBtn()
+    startService[SyncService]
   }
 
   def initBtn() = find[Button](R.id.tracking_btn) onClick {
@@ -48,7 +50,7 @@ class TumblerActivity extends SActivity with Futerable with HasSettings {
   def saveLog() = Future {
     val file = new File(Environment.getExternalStorageDirectory, "out.csv")
     file.createNewFile()
-    Log.d("path", file.getAbsolutePath)
+    info("Log saved")
     val stream = new FileOutputStream(file.getAbsolutePath)
     for (entry <- DataEntry.all)
       stream.write(entry.pretty.toCharArray.map(_.toByte))
